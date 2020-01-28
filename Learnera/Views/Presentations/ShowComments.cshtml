@@ -1,0 +1,358 @@
+﻿@model IEnumerable<Learnera.Models.Comment>
+@{
+    ViewBag.Title = "Show comments";
+    ViewBag.Name = "Petar";
+    ViewBag.LastName = "Penkov";
+}
+
+@{
+    int index = 0;
+}
+<div class="row mt-5 justify-content-center">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12 d-flex">
+                        <p class="mb-0 d-flex align-items-center">Questions & Answers</p>
+                        <button id="askQuestionButton" class="btn btn-primary ml-auto" onclick="focusOnComment()"><i class="far fa-edit"></i> Ask question</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+
+                    <ul id="commentsList" style="list-style-type: none;  padding-left: 0px ">
+                        <!-- Comments -->
+                        @foreach (var comment in Model)
+                        {
+                            index++;
+                            <li>
+                                <div class="p-3 row">
+                                    <div class="d-flex flex-column align-items-center justify-content-between h5 mb-4" style="width:4%;">
+                                        <button class="btn btn-link p-0 upVoteComment" onclick="Voted(this)" id="@comment.Id"><img src="../../Content/Images/sort-up.png" style="height: 10px; width: 15px"></button>
+                                        <span class="numberOfLikes display-5" style="margin:0">@comment.LikesCount</span>
+                                        <button class="btn btn-link p-0 downVoteComment" onclick="Voted(this)" id="@comment.Id"><img src="../../Content/Images/sort-down.png" style="height: 10px; width: 15px"></button>
+                                    </div>
+                                    <div style="width:94%; padding-left: 10px">
+                                        <h4 class="text-info">@comment.Author.Name  @comment.Author.LastName</h4>
+                                        <h4 class="text-dark ">@comment.Text</h4>
+                                        <button class="btn btn-sm btn-light reply-show" id="@comment.Id"><i class="fas fa-reply"></i> Reply</button>
+                                    </div>
+                                </div>
+
+                                <ul class="replies-list" id="to-reply-@comment.Id" style="list-style-type: none ">
+
+                                    <!-- Replies -->
+                                    @foreach (var reply in comment.Replies)
+                                    {
+                                        <li class="h5 mb-4 bg-light rounded p-3 border row" style="border-color: ghostwhite">
+                                            <div class="d-flex flex-column align-items-center justify-content-between" style="width:4%;">
+                                                <button class="btn btn-link p-0 upVoteReply" onclick="Voted(this)" id="@reply.Id"><img src="../../Content/Images/sort-up.png" style="height: 10px; width: 15px"></button>
+                                                <span class="numberOfLikes display-5" style="margin:0">@reply.LikesCount</span>
+                                                <button class="btn btn-link p-0 downVoteReply" onclick="Voted(this)" id="@reply.Id"><img src="../../Content/Images/sort-down.png" style="height: 10px; width: 15px"></button>
+                                            </div>
+                                            <div style="width:94%; padding-left: 10px">
+                                                <h4 class="text-info">@reply.Author.Name  @reply.Author.LastName</h4>
+                                                <h4 class="text-dark ">@reply.Text</h4>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                           <hr />
+                        }
+                        @if (index == Model.Count() || Model.Count() == 0)
+                        {
+                                <div class='row ml-2'>
+                                    <div class='col-12 col-sm-8 col-md-6'>
+                                        <small>Posting as: <span class='text-info'>@User.Identity.Name</span></small>
+                                    </div>
+                                    <div class='col-12 col-sm-8 col-md-6'></div>
+                                    <div class='form-group col-12 col-sm-8 col-md-6'>
+                                        <label for='comment'>Write your question:</label>
+                                        <textarea class="form-control" rows="5" id="comment"></textarea>
+                                    </div>
+                                    <div class='col-12 col-sm-8 col-md-6'></div>
+                                    <div class='col-12 col-sm-8 col-md-6 d-flex'>
+                                        <button id='postCommentButton' type='button' class='btn btn-primary ml-auto'>Post</button>
+                                    </div>
+                                </div>
+                            }
+                        
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+
+    // Change Icon
+    function ChangeUpVoteIcon(button, selected) {
+        var image = $(button).children()[0];
+
+        if (selected)
+            image.src = "../../Content/Images/sort-up1.png";
+        else
+            image.src = "../../Content/Images/sort-up.png";
+    }
+
+    function ChangeDownVoteIcon(button, selected) {
+        var image = $(button).children()[0];
+
+        if (selected)
+            image.src = "../../Content/Images/sort-down1.png";
+        else
+            image.src = "../../Content/Images/sort-down.png";
+    }
+
+
+    // Comment Up Vote
+    function Voted(vote) {
+        var voteId = $(vote).attr("id");
+
+        // ---- COMMENT UP ----
+        if ($(vote).hasClass("upVoteComment")) {
+            // COMMENT UP
+            var key = voteId + "CUP";
+
+            if (localStorage.getItem(key) == null) {
+                var changeValue = 1;
+                var downKey = voteId + "CDOWN";
+                if (localStorage.getItem(downKey) != null) {        // Ako prethodno bilo Down Vote treba za 2 da ja smenis vrendosta.
+                    changeValue = 2;
+                    localStorage.removeItem(downKey);
+
+                    var downButton = $(vote).next().next();
+                    ChangeDownVoteIcon(downButton, false);
+                }
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeCommentLikes",
+                    data: {
+                        'id': voteId,
+                        'value': changeValue
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).next()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + changeValue;
+
+                ChangeUpVoteIcon(vote, true);
+
+                // Add to local storage
+                localStorage.setItem(key, "true");
+            } else {
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeCommentLikes",
+                    data: {
+                        'id': voteId,
+                        'value': -1
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).next()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) - 1;
+
+                ChangeUpVoteIcon(vote, false);
+
+                // Add to local storage
+                localStorage.removeItem(key);
+            }
+
+
+
+
+
+            // ---- COMMENT DOWN ------
+        } else if ($(vote).hasClass("downVoteComment")) {
+            // COMMENT DOWN
+            var key = voteId + "CDOWN";
+            if (localStorage.getItem(key) == null) {
+                var changeValue = -1;
+                var upKey = voteId + "CUP";
+                if (localStorage.getItem(upKey) != null) {        // Ako prethodno bilo Down Vote treba za 2 da ja smenis vrendosta.
+                    changeValue = -2;
+                    localStorage.removeItem(upKey);
+
+                    var upButton = $(vote).prev().prev();
+                    ChangeUpVoteIcon(upButton, false);
+                }
+
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeCommentLikes",
+                    data: {
+                        'id': voteId,
+                        'value': changeValue
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).prev()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + changeValue;
+
+                ChangeDownVoteIcon(vote, true);
+
+                // Add to local storage
+                localStorage.setItem(key, "true");
+            } else {
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeCommentLikes",
+                    data: {
+                        'id': voteId,
+                        'value': 1
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).prev()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + 1;
+
+                ChangeDownVoteIcon(vote, false);
+
+                // Add to local storage
+                localStorage.removeItem(key);
+            }
+
+
+
+            // ---- VOTE UP ----
+        } else if ($(vote).hasClass("upVoteReply")) {
+            // Reply Up Vote
+            var key = voteId + "RUP";
+
+            if (localStorage.getItem(key) == null) {
+                var changeValue = 1;
+                var downKey = voteId + "RDOWN";
+                if (localStorage.getItem(downKey) != null) {        // Ako prethodno bilo Down Vote treba za 2 da ja smenis vrendosta.
+                    changeValue = 2;
+                    localStorage.removeItem(downKey);
+
+                    var downButton = $(vote).next().next();
+                    ChangeDownVoteIcon(downButton, false);
+                }
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeReplyLikes",
+                    data: {
+                        'id': voteId,
+                        'value': changeValue
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).next()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + changeValue;
+
+                ChangeUpVoteIcon(vote, true);
+
+                // Add to local storage
+                localStorage.setItem(key, "true");
+            } else {
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeReplyLikes",
+                    data: {
+                        'id': voteId,
+                        'value': -1
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).next()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) - 1;
+
+                ChangeUpVoteIcon(vote, false);
+
+                // Add to local storage
+                localStorage.removeItem(key);
+            }
+
+
+
+
+            // ---- VOTE DOWN ----
+        } else if ($(vote).hasClass("downVoteReply")) {
+            // Reply Down Vote
+            var key = voteId + "RDOWN";
+            if (localStorage.getItem(key) == null) {
+                var changeValue = -1;
+                var upKey = voteId + "RUP";
+                if (localStorage.getItem(upKey) != null) {        // Ako prethodno bilo Down Vote treba za 2 da ja smenis vrendosta.
+                    changeValue = -2;
+                    localStorage.removeItem(upKey);
+
+                    var upButton = $(vote).prev().prev();
+                    ChangeUpVoteIcon(upButton, false);
+                }
+
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeReplyLikes",
+                    data: {
+                        'id': voteId,
+                        'value': changeValue
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).prev()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + changeValue;
+
+                ChangeDownVoteIcon(vote, true);
+
+                // Add to local storage
+                localStorage.setItem(key, "true");
+            } else {
+                // Post
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/ChangeReplyLikes",
+                    data: {
+                        'id': voteId,
+                        'value': 1
+                    }
+                });
+                // Changing value
+                var voteNumber = $(vote).prev()[0];
+                voteNumber.innerHTML = parseInt(voteNumber.innerHTML) + 1;
+
+                ChangeDownVoteIcon(vote, false);
+
+                // Add to local storage
+                localStorage.removeItem(key);
+            }
+        }
+
+    }
+</script>
+<script>
+
+    var replyClicked = {}
+
+    $('.reply-show').click(event => {
+
+        var commentId = event.target.id;
+
+        if (replyClicked[commentId] == null) {
+            replyClicked[commentId] = "true";
+            var target = "to-reply-" + commentId;
+            var commentBox = "<div class='row reply-div'><div class='col-12 col-sm-8 col-md-6'><small>Replying as: <span class='text-info'>" + "@User.Identity.Name" + "</span></small></div><div class='col-12 col-sm-8 col-md-6'></div><div class='form-group col-12 col-sm-8 col-md-6'><label for='comment'>Write your reply:</label> <textarea class='form-control' rows='3' id='reply-text-area'></textarea></div><div class='col-12 col-sm-8 col-md-6'></div><div class='col-12 col-sm-8 col-md-6 d-flex'><button id='postReplyButton' type='button' class='btn btn-info ml-auto'>Reply</button></div></div>";
+            $("#" + target).append(commentBox);
+            $("#reply-text-area").focus();
+        }
+    })
+</script>
+

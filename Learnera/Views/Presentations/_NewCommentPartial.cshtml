@@ -1,0 +1,18 @@
+﻿@model Learnera.Models.Comment
+
+
+<li>
+    <div class="p-3 row">
+        <div class="d-flex flex-column align-items-center justify-content-between h5 mb-4" style="width:4%;">
+            <button class="btn btn-link p-0 upVoteComment" onclick="Voted(this)" id="@Model.Id"><img src="../../Content/Images/sort-up.png" style="height: 10px; width: 15px"></button>
+            <span class="numberOfLikes display-5" style="margin:0">@Model.LikesCount</span>
+            <button class="btn btn-link p-0 downVoteComment" onclick="Voted(this)" id="@Model.Id"><img src="../../Content/Images/sort-down.png" style="height: 10px; width: 15px"></button>
+        </div>
+        <div style="width:94%; padding-left: 10px">
+            <h4 class="text-info">@Model.Author.Name  @Model.Author.LastName</h4>
+            <h4 class="text-dark ">@Model.Text</h4>
+            <button class="btn btn-sm btn-light reply-show" id="@Model.Id"><i class="fas fa-reply"></i> Reply</button>
+        </div>
+    </div>
+</li>
+</hr>

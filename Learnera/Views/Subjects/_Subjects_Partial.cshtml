@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Learnera.Models.Subject>
+    <thead style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Professor)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.CheckBox("Add subject", false)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name, new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Professor, new { @class = "form-control" })
+            </td>
+        </tr>
+        }
+    </tbody>

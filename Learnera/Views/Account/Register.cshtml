@@ -1,0 +1,276 @@
+﻿@model Learnera.Models.RegisterViewModel
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @ViewBag.Title = "Register";
+    }*@
+@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <link href="~/Content/signup.css" rel="stylesheet" />
+
+    <script src="https://kit.fontawesome.com/2ef2e02437.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/signup.css")
+
+    <script>
+        //GLOBAL VARIABLES
+
+        var ime = "";
+        var prezime = "";
+        var email = "";
+        var pasvord = "";
+        var confirm = "";
+        var odbranipredmeti = [];
+        var model1 = [];
+
+        var Subject = "";
+        var Profesor = "";
+
+        function afterButton() {
+            $('#page1').removeClass('bg-primary');
+            $('#page1').removeClass('active');
+            $('#page1').addClass('disabled');
+
+            $('#page2').addClass('bg-primary');
+            $('#page2').addClass('active');
+            $('#page2').removeClass('disabled');
+
+            $('#stepOne').hide();
+            $('#stepTwo').show();
+        }
+
+        function firstNextButtonClicked() {
+            var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+            var emailValidator = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            ime = $("#inputName").val();
+            prezime = $("#inputSurname").val();
+            email = $("#inputEmail").val()
+            pasvord = $("#inputPassword").val()
+            confirm = $("#inputCpassword").val()
+            if (ime != "" && prezime != "" && email != "" && pasvord != "" && confirm != "") {
+                afterButton();
+            } else {
+                if (ime == "") {
+                    $(".name").html("Plese enter your Name!");
+                } else {
+                    $(".name").html("");
+                }
+                if (prezime == "") {
+                    $(".surname").html("Plese enter your Surname!");
+                } else {
+                    $(".surname").html("");
+                }
+                if (email == "") {
+                    $(".email").html("Plese enter your Email!");
+                } else {
+                    if (email.match(emailValidator)) {
+                        
+                        $(".email").html("");
+                    } else {
+                        $(".email").html("Enter valid email!");
+                    }
+                }
+                if (pasvord == "") {
+                    $(".password").html("Plese enter your Password!");
+                } else {
+                    if (pasvord.match(decimal)) {
+                        if (pasvord == confirm) {
+                            $(".password").html("");
+                        } else {
+                            $(".password").html("Passwords doesn's match");
+                        }
+                    } else {
+                        $(".password").html("Password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
+                    }
+                }
+                if (confirm == "") {
+                    $(".cpassword").html("Plese enter your Confirm Password!");
+                } else {
+                    if (confirm.match(decimal)) {
+                        if (pasvord == confirm) {
+                            $(".cpassword").html("");
+                        } else {
+                            $(".cpassword").html("Passwords doesn's match");
+                        }
+                    } else {
+                        $(".cpassword").html("Password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
+                    }
+                }
+            }
+        };
+
+        function secondNextButtonClicked() {
+            //GET ALL SELECTED SUBJECTS
+
+            $('#myTable input:checkbox:checked').each(function () {
+                var rowId = $(this).parents("tr").children('td')
+                var subject = rowId[1].innerText
+                var profesor = rowId[2].innerText
+                odbranipredmeti.push({ "Name": subject, "Professor": profesor });
+            });
+
+            $('#sub_mission_list tr').each(function () {
+                var describe = $(this).find('textarea').val();
+                console.log(describe);
+            });
+
+
+
+            $.ajax({
+                url: "/Account/Register",
+                method: "POST",
+                data: {
+                    model: { Name: ime, Surname: prezime, Email: email, Password: pasvord, ConfirmPassword: confirm, subjects: odbranipredmeti }
+                },
+                success: function (data) {
+                    odbranipredmeti = [];
+                    $("html").html(data);
+                }
+            });
+
+        };
+
+        function fistBackButtonClicked() {
+            $('#page1').addClass('bg-primary');
+            $('#page1').addClass('active');
+            $('#page1').removeClass('disabled');
+
+            $('#page2').removeClass('bg-primary');
+            $('#page2').removeClass('active')
+            $('#page2').addClass('disabled');
+
+            $('#stepOne').show();
+            $('#stepTwo').hide();
+
+
+        };
+
+        $(document).ready(function () {
+            $('#stepOne').show();
+            $('#stepTwo').hide();
+            $('#myTable').load('/Subjects/GetSubjects');
+        });
+
+
+    </script>
+
+</head>
+<body>
+
+
+    <div class="container" id="container" style="height: 100vh; ">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-lg-8 col-xl-8   col-sm-12 col-md-12 text-white">
+
+                <div class="card card-signin my-5">
+
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="col-12">
+                                <div class="row d-flex justify-content-center">
+                                    <ul class="list-group list-group-horizontal">
+                                        <li class="list-group-item bg-primary active" id="page1">Step 1</li>
+                                        <li class="list-group-item disabled" id="page2">Step 2</li>
+                                    </ul>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 ">
+                                        <h3 class="card-title text-center font-weight-bold my-3">Sign up!</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--Step ONE-->
+                            <div id="stepOne" class="container">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-danger name"></label>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                                            <label for="inputName">Name*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="text-danger surname"></label>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputSurname" class="form-control"
+                                                   placeholder="Surname" required autofocus>
+                                            <label for="inputSurname">Surname*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class="text-danger email"></label>
+                                        <div class="form-label-group">
+
+                                            <input type="email" id="inputEmail" class="form-control btn-block"
+                                                   placeholder="Email address" required autofocus>
+                                            <label for="inputEmail">Email address*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-danger password"></label>
+                                        <div class="form-label-group">
+                                            <input type="password" id="inputPassword" class="form-control" placeholder="Password*"
+                                                   required autofocus>
+                                            <label for="inputPassword">Password*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="text-danger cpassword"></label>
+                                        <div class="form-label-group">
+                                            <input type="password" id="inputCpassword" class="form-control"
+                                                   placeholder="Confirm Password*" required autofocus>
+                                            <label for="inputCpassword">Confirm Password*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <button style="width:220px" class="btn btn-md text-light  btn-primary " onclick="firstNextButtonClicked();" type="submit">Continue <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                            <!--/Step ONE-->
+                            <!--Step TWO-->
+                            <div id="stepTwo" class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-bordered table-dark" id="myTable"></table>
+                                    </div>
+                                </div>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <button style="width:100px" class="btn btn-md text-dark  btn-light " onclick="fistBackButtonClicked();" type="submit">
+                                                <i class="fas fa-arrow-left"></i> Back
+                                            </button>
+                                        </div>
+                                        <div class="col-7 d-flex justify-content-end">
+                                            <input style="width:220px" type="submit" onclick="secondNextButtonClicked();" class="btn btn-success" value="Register" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/Step TWO-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,156 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+    <link rel="icon" href="~/Content/learnera.png"
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Welcome</title>
+    <script src="https://kit.fontawesome.com/883500bd7a.js"></script>
+    @Styles.Render("~/Content/css")
+
+    <style>
+        .laptop {
+            background: url("../../Content/laptop.jpg") no-repeat center center;
+            background-size: cover;
+        }
+
+        .semi-transparent {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        body, html {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+    </style>
+
+</head>
+
+<body>
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 57a67999857c356c56050b80f21d99a06616b814
+    <div class="jumbotron mb-0 laptop">
+        <div class="container text-center d-flex flex-column">
+            <div class="display-4 font-weight-bold text-white">
+                Welcome to Learnera!
+            </div>
+            <div class="mt-5">
+                <p class="text-white font-weight-light">
+                    Browse your subjects bellow, ask questions and help your
+                    colleagues!
+                </p>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light  border-bottom semi-transparent sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand font-weight-bold" href="/home/index"><img class="img-fluid" style="width:40px;" src="~/Content/learnera.png"> Learnera </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item ml-2">
+                        <a class="nav-link" href="/home/index"><i class="fas fa-home"></i> Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item ml-2">
+                        <a class="nav-link" href="/subjects/index"><i class="fas fa-book"></i> Add subjects</a>
+                    </li>
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item ml-2">
+                            <a class="nav-link" href="/account/manageroles"><i class="fas fa-users"></i> Manage roles</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                    {
+                        <li class="nav-item ml-2">
+                            <a class="nav-link" href="/subjects/getallsubjects"><i class="fas fa-book"></i> Manage subjects</a>
+                        </li>
+                    }
+                    <li class="nav-item ml-2">
+                        <a class="nav-link" href="/home/about"><i class="fas fa-users"></i> About us</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> @User.Identity.GetUserName()
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            <a class="dropdown-item text-dark" href="./EditUser/@User.Identity.GetUserId()">Account settings</a>
+
+                            <div class="dropdown-divider"></div>
+                            @if (Request.IsAuthenticated)
+                            {
+
+                                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <a class="dropdown-item text-dark" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+<<<<<<< HEAD
+                                 
+
+                                }
+                            }
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+=======
+
+                                }
+                            }
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <div class="container-fluid shadow border-top  mt-5 " style="border-color: whitesmoke">
+        <div class="container">
+            <div class="row  justify-content-between align-items-center ">
+                <div class="col-1">
+                    <img class="img-fluid" style="width:40px;" src="~/Content/learnera.png">    
+                </div>
+                <div class="col-3 text-center mt-4 mb-4">
+                    <h6 class="font-weight-bold text-muted">  Learnera©, 2019</h6>
+                </div>
+                <div class="col-1 pl-0 pr-3 text-right my-4">
+                    <a href="#" onclick="toTop()"><i class="fas fa-arrow-up"></i> To top</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> 57a67999857c356c56050b80f21d99a06616b814
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

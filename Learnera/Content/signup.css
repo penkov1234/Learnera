@@ -1,0 +1,139 @@
+body {
+    background-image: url("accounting.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Source Sans Pro', sans-serif;
+    --input-padding-x: 1.5rem;
+    --input-padding-y: .75rem;
+}
+
+.card-signin {
+    background-color: rgba(60, 60, 60, 0.9);
+    border: 0;
+    border-radius: 0,7rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(2, 2, 2, 0.1);
+ 
+}
+
+.card-signin .card-title {
+    font-weight: 300;
+    font-size: 2.0rem;
+}
+
+.form-signin .btn {
+    font-size: 80%;
+    border-radius: 0,7rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.form-label-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+    .form-label-group input {
+        height: auto;
+        border-radius: 0,7rem;
+        background-color: dimgray;
+    }
+
+.form-label-group>input,
+.form-label-group>label {
+    padding: var(--input-padding-y) var(--input-padding-x);
+}
+
+.form-label-group>label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+    /* Override default `<label>` margin */
+    line-height: 1.5;
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    transition: all .1s ease-in-out;
+}
+
+    .form-label-group input:not(:placeholder-shown) {
+        padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+        padding-bottom: calc(var(--input-padding-y) / 3);
+        color: white;
+    }
+
+    .form-label-group input:not(:placeholder-shown) ~ label {
+        padding-top: calc(var(--input-padding-y) / 3);
+        padding-bottom: calc(var(--input-padding-y) / 3);
+        font-size: 12px;
+        color: #00a9ff;
+    }
+#inputPassword:focus, #inputEmail:focus, #inputName:focus, #inputCpassword:focus,#inputSurname:focus {
+    background-color: rgba(19, 19, 19, 0.534);
+}
+
+
+
+.btn-google {
+    color: white;
+    background-color: #ea4335;
+}
+
+.btn-facebook {
+    color: white;
+    background-color: #3b5998;
+}
+
+
+
+.progressbar {
+    counter-reset: step;
+}
+.progressbar li {
+    list-style-type: none;
+    width: 25%;
+    float: left;
+    font-size: 12px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    color: black;
+}
+.progressbar li:before {
+    width: 30px;
+    height: 30px;
+    content: counter(step);
+    counter-increment: step;
+    line-height: 30px;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 10%;
+    background-color: white;
+}
+.progressbar li:after {
+    width: 100%;
+    height: 2px;
+    content: '';
+    position: absolute;
+    background-color: #ffffff;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+}
+.progressbar li:first-child:after {
+    content: none;
+}
+.progressbar li.active {
+    color: #ffffff;
+}
+.progressbar li.active:before {
+    border-color: #ffffff;
+}
+.progressbar li.active + li:after {
+    background-color: #ffffff;
+}

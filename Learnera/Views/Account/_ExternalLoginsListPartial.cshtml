@@ -1,0 +1,26 @@
+﻿@model Learnera.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0)
+    {
+
+    }
+    else
+    {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        <button type="submit" class="btn btn-md btn-@p.AuthenticationType btn-block text-uppercase" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Sign in with @p.Caption account">Sign in with @p.Caption</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}

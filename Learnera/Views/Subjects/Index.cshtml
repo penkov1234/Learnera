@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Learnera.Models.SubjectsDTO>
+
+@{
+    ViewBag.Title = "Add favourite subjects";
+}
+<div class="row shadow-sm rounded border mt-3 " style="border-color: whitesmoke">
+    <div class="col-12 d-flex flex-column justify-content-center" style="height: 50px;">
+        <h3 class=" text-secondary">Choose your favourite subjects</h3>
+    </div>
+</div>
+
+<div class="row border-left border-right shadow-sm">
+    <div class="col-12 pt-5">
+        <table class="table  table-dark " id="myTable" style="border-radius: 10px;">
+            <thead style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <tr>
+                    <th></th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Professor
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.CheckBox("Add subject", item.isSelected)
+                        </td>
+                        <td>
+                            @item.subject.Name
+                        </td>
+                        <td>
+                            @item.subject.Professor
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    
+        <div class="col-12 text-right pb-3">
+            <button style="width:220px" class="btn btn-primary" onclick="saveButtonClicked()">Save</button>
+        </div>
+    
+</div>
+    
+
+
+    <script>
+        var model = [];
+        function saveButtonClicked() {
+            //GET ALL SELECTED SUBJECTS
+            $('#myTable input:checkbox:checked').each(function () {
+                var rowId = $(this).parents("tr").children('td');
+                var subject1 = rowId[1].innerText;
+                var profesor = rowId[2].innerText;
+                model.push({ "Name": subject1, "Professor": profesor });
+            });
+            
+            $.ajax({
+                url: "/Subjects/editSubjects",
+                method: "POST",
+                data: {
+                    subject: model
+                },
+                success: function (data) {
+                    
+                    model = [];
+                    $("html").html(data);
+                }
+            });
+
+        };
+    </script>

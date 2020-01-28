@@ -1,0 +1,245 @@
+﻿@model IEnumerable<Learnera.Models.Slide>
+@{
+    ViewBag.Title = "Show slides";
+}
+
+
+@{
+    int shownSlideIndex = 0;
+    int totalSlides = Model.Count();
+    bool enabled = false;
+}
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        height: 100px;
+        width: 100%;
+        outline: black;
+        border-radius: 50%;
+        background-image: none;
+    }
+
+        .carousel-control-next-icon:after {
+            content: '>';
+            font-size: 40px;
+            color: black;
+        }
+
+        .carousel-control-prev-icon:after {
+            content: '<';
+            font-size: 40px;
+            color: black;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h3>Slides for presentation: "@Model.First().Presentation.name"</h3>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="full" class="row justify-content-center mt-5 border-2 shadow-lg" style="border:solid 0.3px; border-color:lightgray ">
+        <div class="col-10 mt-3">
+            <div id="carouselExampleIndicators" class="carousel slide p-3" data-ride="carousel" data-interval="false">
+
+                <div class="carousel-inner" id="start">
+                    @{
+                        bool firstSlide = true;
+                    }
+                    @foreach (var slide in Model) {
+                        if (firstSlide) {
+                            firstSlide = false;
+                            <div class="carousel-item active" id="@slide.Id">
+                                <img class="d-block w-100" src="@slide.ImageUrl" alt="First slide">
+                            </div>
+                        } else {
+                            <div class="carousel-item" id="@slide.Id">
+                                <img class="d-block w-100" src="@slide.ImageUrl" alt="First slide">
+                            </div>
+                        }
+                    }
+
+                    }
+                </div>
+                <a id="leftSlide" class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a id="rightSlide" class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 bg-light shadow-sm p-2 d-flex border-top-0" style="border:solid 0.3px; border-color:lightgray ">
+            <button class="btn btn-primary ml-2" onclick="goBack()"><i class="far fa-arrow-alt-circle-left"></i> Go back</button>
+            <button class="btn btn-primary ml-auto mr-2" onclick="openFullscreen()"><i class="fas fa-compress"></i> Full screen</button>
+
+        </div>
+    </div>
+
+</div>
+<div class="container">
+    <div class="row mt-5">
+        <div id="comments" class="col-12 shadow-lg pb-3 ">
+
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    <script>
+        var firstSlideId = $('.carousel-item').first().attr("id");
+        var lastSlideId = $('.carousel-item').last().attr("id");
+
+        /* Load slide comments */
+        function LoadComments(slideId) {
+            $("#comments").load('@(Url.Action("ShowComments","Presentations",null, Request.Url.Scheme))?id=' + slideId);
+        }
+
+        $("#leftSlide").click(function () {
+            var slideId = $('div.active').attr("id");
+            slideId -= 1;
+            if (slideId < firstSlideId)
+                slideId = lastSlideId;
+
+            LoadComments(slideId);
+        });
+
+        $("#rightSlide").click(function () {
+            var slideId = $('div.active').attr("id");
+            slideId++;
+            if (slideId > lastSlideId)
+                slideId = firstSlideId;
+
+            LoadComments(slideId);
+        });
+
+        document.addEventListener('keypress', event => {
+            let keycode = event.which || event.keyCode;
+            if (keycode === 37) $('leftSide').click();
+            if (keycode === 39) $('rightSide').click();
+        })
+
+        // Load first slide comments When page opens
+        $(document).ready(function () {
+            $("#comments").load('@(Url.Action("ShowComments","Presentations",null, Request.Url.Scheme))?id=' + firstSlideId);
+        })
+
+
+        /* Get the documentElement (<html>) to display the page in fullscreen */
+        var elem = document.getElementById("full");
+
+        /* View in fullscreen */
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+            var elements = document.getElementsByClassName("d-block");
+            for (var i = 0; i < elements.length; i++) {
+               elements[i].style.height = "100%"
+                elements[i].classList.remove("w-100");
+                elements[i].classList.add("ml-4")
+            }
+        }
+
+        /* Close fullscreen */
+        function closeFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.msExitFullscreen();
+            }
+
+            var elements = document.getElementsByClassName("d-block");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].classList.add("w-100");
+                elements[i].classList.add("w-100");
+                elements[i].classList.remove("ml-4")
+            }
+        }
+    </script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    <script>
+        $(document).on("click", "#postCommentButton", function () {
+             var slideId = $('div.active').attr("id");
+             var email = "@User.Identity.Name";
+            $.ajax({
+                type: "POST",
+                url: "/Presentations/AddComment",
+                data: {
+                email: email,
+                text: document.getElementById('comment').value,
+                slideId: slideId
+                },
+                success: function (result) {
+                    $('#commentsList > :last').before(result);
+                },
+            error: function (result) {
+                alert('error');
+            }
+        });
+
+        });
+
+
+    </script>
+    <script>
+        function focusOnComment() {
+            document.getElementById("comment").focus();
+        }
+    </script>
+   
+
+    <script>
+        
+
+        $(document).on("click", "#postReplyButton", function () {
+            
+               
+                var repliesSection = $(this).parents('ul')[0]
+                var commentId = String(repliesSection.id).split('-')[2];
+                var email = "@User.Identity.Name";
+                var textValue = $('#reply-text-area')[0].value;
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/Presentations/AddReply",
+                    data: {
+                        email: email,
+                        text: textValue,
+                        commentId: commentId
+                    },
+                    success: function (result) {
+                        $(".reply-div").remove();
+                        $("#" + repliesSection.id).append(result);
+                        delete replyClicked[commentId]
+                    },
+                    error: function (result) {
+                        alert('error');
+                    }
+                });
+            
+            
+        });
+    </script>
+}

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Learnera.Models.Subject>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<meta charset="UTF-8">
+<title>Learnera</title>
+<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<script src="https://kit.fontawesome.com/883500bd7a.js"></script>
+
+@Styles.Render("~/Content/Presentations.css")
+@if (Model.Count() != 0)
+{
+    <div class="row shadow-sm rounded border mt-3" style="border-color: whitesmoke">
+        <div class="col-12 d-flex flex-column justify-content-center" style="height: 50px;">
+            <h3 class=" text-secondary">Browse your subjects</h3>
+        </div>
+    </div>
+    
+    <div class="row border-left border-right shadow-sm">
+        <div class="col-12 mt-3 pb-3 border-bottom">
+           
+            <div class="row mt-5 justify-content-center">
+
+                @foreach (var subject in Model)
+                {
+                    <div class="col-5 ml-5 mb-3">
+                        <div class="blog-card blog-card-blog">
+                            <div class="blog-card-image" style="box-shadow:none;">
+                                <a href="/Presentations/Show/@subject.Id"> <img class="img" src="~/Content/subjects.png"> </a>
+                                <div class="ripple-cont"></div>
+                            </div>
+                            <div class="blog-table">
+                                <h3 class="blog-card-caption py-3">
+                                    <a href="/Presentations/Show/@subject.Id"> @subject.Name</a>
+                                </h3>
+                                <div class="ftr">
+                                    <div class="author">
+                                        <img src="~/Content/profesor.png" alt="..." class="avatar img-raised"><span class="text-muted">@subject.Professor</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="card text-center mx-auto mb-5 mt-5" style="padding: 0; border-radius:5px;">
+
+                            <div class="card-header" style="background-color: #659DBD">
+                                <h2 style="margin:0" class="text-light"> <a  class="text-light" href="/Presentations/Show/@subject.Id"> @subject.Name</a></h2>
+                            </div>
+                            <div class="card-body" style="padding: 0; margin: 0.5em">
+                                <img src="~/Content/calc3.png" class="card-img">
+                            </div>
+                            <div class="card-footer" style="background-color: #659DBD">
+                                <h5 class="text-right text-light" style="margin:0">@subject.Professor</h5>
+                            </div>
+                        </div>*@
+
+                }
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="container" style="height:100%">
+        <div class="row text-center">
+            <div class="col-12 mt-5">
+                <img style="width:500px; height:300px" src="~/Content/nosubjects.jpg" alt="Alternate Text" />
+                <div class="text-danger h3 pt-1">Please go to Add Subjects tab and add your favourite subjects.</div>
+            </div>
+        </div>
+    </div>
+}
+
