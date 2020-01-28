@@ -9,7 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-    <link rel="icon" href="~/Content/learnera.png"
+    <link rel="icon" href="~/Content/learnera.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Welcome</title>
@@ -34,11 +34,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 57a67999857c356c56050b80f21d99a06616b814
     <div class="jumbotron mb-0 laptop">
         <div class="container text-center d-flex flex-column">
             <div class="display-4 font-weight-bold text-white">
@@ -103,7 +98,6 @@
                                     @Html.AntiForgeryToken()
 
                                     <a class="dropdown-item text-dark" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-<<<<<<< HEAD
                                  
 
                                 }
@@ -119,37 +113,6 @@
     <div class="container body-content">
         @RenderBody()
     </div>
-
-=======
-
-                                }
-                            }
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-    </div>
-    <div class="container-fluid shadow border-top  mt-5 " style="border-color: whitesmoke">
-        <div class="container">
-            <div class="row  justify-content-between align-items-center ">
-                <div class="col-1">
-                    <img class="img-fluid" style="width:40px;" src="~/Content/learnera.png">    
-                </div>
-                <div class="col-3 text-center mt-4 mb-4">
-                    <h6 class="font-weight-bold text-muted">  Learnera©, 2019</h6>
-                </div>
-                <div class="col-1 pl-0 pr-3 text-right my-4">
-                    <a href="#" onclick="toTop()"><i class="fas fa-arrow-up"></i> To top</a>
-
-                </div>
-            </div>
-        </div>
-    </div>
->>>>>>> 57a67999857c356c56050b80f21d99a06616b814
 
     @RenderSection("scripts", required: false)
 </body>

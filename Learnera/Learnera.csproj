@@ -180,7 +180,6 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PresentationsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
-<<<<<<< HEAD
     <Compile Include="Migrations\202001272337444_last.cs" />
     <Compile Include="Migrations\202001272337444_last.Designer.cs">
       <DependentUpon>202001272337444_last.cs</DependentUpon>
@@ -190,8 +189,6 @@
       <DependentUpon>202001272342145_last-last.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\UserRoleDTO.cs" />
-=======
->>>>>>> 57a67999857c356c56050b80f21d99a06616b814
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -963,11 +960,8 @@
     <Content Include="Views\Presentations\ShowComments.cshtml" />
     <Content Include="Views\Presentations\_NewCommentPartial.cshtml" />
     <Content Include="Views\Presentations\_NewReplyPartial.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Account\ManageRoles.cshtml" />
     <Content Include="Views\Subjects\AllSubjects.cshtml" />
-=======
->>>>>>> 57a67999857c356c56050b80f21d99a06616b814
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

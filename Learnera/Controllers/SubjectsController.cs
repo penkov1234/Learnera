@@ -176,6 +176,13 @@ namespace Learnera.Controllers
                 user.Subjects.Remove(subject);
                 db.SaveChanges();
             }
+            foreach(Presentation p in db.presentantions.ToList())
+            {
+                if (p.Subject == subject)
+                {
+                    p.Subject = null;
+                }
+            }
             db.subjects.Remove(subject);
             db.SaveChanges();
             return RedirectToAction("Index");

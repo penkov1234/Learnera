@@ -52,8 +52,6 @@ namespace Learnera.Controllers
                 _userManager = value;
             }
         }
-
-<<<<<<< HEAD
         [Authorize(Roles = "Administrator")]
         public ActionResult ManageRoles()
         {
@@ -82,9 +80,7 @@ namespace Learnera.Controllers
             UserManager.AddToRole(user.Id, model.chosenRole);
             return RedirectToAction("Index", "Home");
         }
-=======
->>>>>>> 57a67999857c356c56050b80f21d99a06616b814
-        //
+
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
