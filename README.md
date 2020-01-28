@@ -1,5 +1,5 @@
-﻿# Learnera | User Interfaces project 
-This project is made for purposes of the course "User Interfaces" at our faculty. The project is designed to be an improved and extended version of FINKI's Moodle/Courses. 
+﻿# Learnera | Internet technologies project 
+This project is made for purposes of the course "Internet technologies" at our faculty. The project is designed to be an improved and extended version of FINKI's Moodle/Courses. 
 The project allows the users to:
  - Choose favorite subjects
  - Browse through the presentations of the subjects
